@@ -2,3 +2,4 @@ token
 .vscode
 *__pycache__*
 *_repos
+*_files
