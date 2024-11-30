@@ -1,4 +1,4 @@
 token
 .vscode
 *__pycache__*
-repos
+*_repos
