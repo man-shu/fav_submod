@@ -43,7 +43,7 @@ for repo in repos:
     if (repo["size"] / 1024) / 1024 > 1:
         repos_larger_than_1gb.append(repo)
 
-print(f"Found {len(repos_owned_by_query)} repositories owned by '{query}'.\n")
+print(f"Found {len(repos_larger_than_1gb)} repositories larger than 1GB.\n")
 print(
     f"Removing repositories larger than 1GB from the list of "
     "repositories...\n"
@@ -53,8 +53,8 @@ for repo in repos_larger_than_1gb:
     repos.remove(repo)
 print(f"Remaining repositories: {len(repos)}\n")
 
-os.makedirs("repos", exist_ok=True)
-cloned_repos = os.listdir("./repos")
+os.makedirs(f"{query}_repos", exist_ok=True)
+cloned_repos = os.listdir(f"./{query}_repos")
 if len(cloned_repos) > 0:
     print(f"{len(cloned_repos)} repositories already cloned.\n")
     print("Do you want to clone them again? (yes/no)")
@@ -64,7 +64,9 @@ if len(cloned_repos) > 0:
         print(f"Repos not cloned yet repositories: {len(repos)}\n")
         print("Cloning them...\n")
         for repo in tqdm(repos):
-            clone_repository(repo["clone_url"], f"./repos/{repo['name']}")
+            clone_repository(
+                repo["clone_url"], f"./{query}_repos/{repo['name']}"
+            )
 else:
     print("No repositories cloned yet.\n")
     print("Calculating the total size of the repositories...\n")
@@ -88,13 +90,13 @@ else:
             print("Exiting...\n")
             exit()
     for repo in tqdm(repos):
-        clone_repository(repo["clone_url"], f"./repos/{repo['name']}")
+        clone_repository(repo["clone_url"], f"./{query}_repos/{repo['name']}")
 
 print("Analyzing imports...\n")
 all_import_counts = {}
 for repo in cloned_repos:
-    repo_dir = os.path.join("./repos", repo)
-    repo_import_counts = count_imports(repo_dir)
+    repo_dir = os.path.join(f"./{query}_repos", repo)
+    repo_import_counts = count_imports(repo_dir, query)
     for submodule, count in repo_import_counts.items():
         all_import_counts[submodule] = (
             all_import_counts.get(submodule, 0) + count
