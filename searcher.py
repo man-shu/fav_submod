@@ -8,7 +8,12 @@ def search_repositories(query, token, max_pages=100):
         url = f"https://api.github.com/search/repositories?q={query}&page={page}&per_page=100"
         headers = {"Authorization": f"token {token}"}
         response = requests.get(url, headers=headers).json()
-        total_count = response["total_count"]
+        try:
+            total_count = response["total_count"]
+        except KeyError:
+            print("Error in response:")
+            print(response)
+            break
         repos.extend(response["items"])
         if total_count == len(repos):
             break
