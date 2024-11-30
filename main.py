@@ -59,14 +59,25 @@ if len(cloned_repos) > 0:
     print(f"{len(cloned_repos)} repositories already cloned.\n")
     print("Do you want to clone them again? (yes/no)")
     response = input()
-    if response.lower() != "yes":
-        repos = [repo for repo in repos if repo["name"] not in cloned_repos]
-        print(f"Repos not cloned yet repositories: {len(repos)}\n")
-        print("Cloning them...\n")
+    if response.lower() == "yes":
+        print("Cloning all repositories again...\n")
         for repo in tqdm(repos):
             clone_repository(
                 repo["clone_url"], f"./{query}_repos/{repo['name']}"
             )
+    else:
+        print("Do you want to clone the remaining repositories? (yes/no)")
+        response = input()
+        if response.lower() == "yes":
+            repos = [
+                repo for repo in repos if repo["name"] not in cloned_repos
+            ]
+            print(f"Repos not cloned yet: {len(repos)}\n")
+            print("Cloning them...\n")
+            for repo in tqdm(repos):
+                clone_repository(
+                    repo["clone_url"], f"./{query}_repos/{repo['name']}"
+                )
 else:
     print("No repositories cloned yet.\n")
     print("Calculating the total size of the repositories...\n")
@@ -113,4 +124,4 @@ sorted_import_counts = dict(
     sorted(all_import_counts.items(), key=lambda item: item[1], reverse=True)
 )
 for submodule, count in sorted_import_counts.items():
-    print(f"{submodule}: {count}")
+    print(f"\t{submodule}: {count}")
