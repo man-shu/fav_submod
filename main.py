@@ -61,7 +61,26 @@ if len(cloned_repos) > 0:
             clone_repository(repo["clone_url"], f"./repos/{repo['name']}")
 else:
     print("No repositories cloned yet.\n")
-    print("Cloning all repositories...\n")
+    print("Calculating the total size of the repositories...\n")
+    total_size = sum([repo["size"] for repo in repos])
+    print(f"Total size of the repositories: {(total_size / 1024) / 1024} GB\n")
+    print("Do you want to clone all the repositories? (yes/no)")
+    response = input()
+    if response.lower() != "yes":
+        print(
+            "Do you want to clone a specific number of repositories? "
+            "(yes / no (all)  / abort (exit))\n"
+        )
+        response = input()
+        if response.lower() == "yes":
+            print("Enter the number of repositories you want to clone:\n")
+            num_repos = int(input())
+            repos = repos[:num_repos]
+        elif response.lower() == "no":
+            print("Cloning all repositories...\n")
+        elif response.lower() == "abort":
+            print("Exiting...\n")
+            exit()
     for repo in tqdm(repos):
         clone_repository(repo["clone_url"], f"./repos/{repo['name']}")
 
