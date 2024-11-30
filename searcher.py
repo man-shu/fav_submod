@@ -18,7 +18,7 @@ def search_code(query, token, max_pages=100):
         if total_count == len(files):
             break
     # write the code snippets to a file
-    output_file = f"{query}_files.json"
+    output_file = f"data/{query}_files.json"
     with open(output_file, "w") as file:
         json.dump(files, file, indent=4)
     return files
@@ -40,7 +40,7 @@ def search_repositories(query, token, max_pages=100):
         if total_count == len(repos):
             break
     # write the repos to a file
-    output_file = f"{query}_repos.json"
+    output_file = f"data/{query}_repos.json"
     with open(output_file, "w") as file:
         json.dump(repos, file, indent=4)
     return repos

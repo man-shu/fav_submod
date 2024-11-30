@@ -14,10 +14,10 @@ query = "import nilearn OR from nilearn"
 
 token_file_path = "token"
 token = read_token_from_file(token_file_path)
-if os.path.exists(f"{query}_files.json"):
-    print(f"files already found and saved in {query}_files.json.\n")
-    print(f"Reading files from {query}_files.json...\n")
-    with open(f"{query}_files.json", "r") as file:
+if os.path.exists(f"data/{query}_files.json"):
+    print(f"files already found and saved in data/{query}_files.json.\n")
+    print(f"Reading files from data/{query}_files.json...\n")
+    with open(f"data/{query}_files.json", "r") as file:
         files = json.load(file)
 else:
     print("Searching for files...\n")

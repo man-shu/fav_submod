@@ -14,10 +14,10 @@ query = sys.argv[1]
 
 token_file_path = "token"
 token = read_token_from_file(token_file_path)
-if os.path.exists(f"{query}_repos.json"):
-    print(f"Repos already found and saved in {query}_repos.json.\n")
-    print(f"Reading repositories from {query}_repos.json...\n")
-    with open(f"{query}_repos.json", "r") as file:
+if os.path.exists(f"data/{query}_repos.json"):
+    print(f"Repos already found and saved in data/{query}_repos.json.\n")
+    print(f"Reading repositories from data/{query}_repos.json...\n")
+    with open(f"data/{query}_repos.json", "r") as file:
         repos = json.load(file)
 else:
     print("Searching for repositories...\n")
