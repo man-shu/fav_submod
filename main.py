@@ -4,10 +4,16 @@ from analyser import count_imports
 import os
 from tqdm import tqdm
 import json
+import sys
+
+# get the query from the first argument
+if len(sys.argv) < 2:
+    print("Please provide a query.")
+    exit()
+query = sys.argv[1]
 
 token_file_path = "token"
 token = read_token_from_file(token_file_path)
-query = "nilearn"
 if os.path.exists(f"{query}_repos.json"):
     print(f"Repos already found and saved in {query}_repos.json.\n")
     print(f"Reading repositories from {query}_repos.json...\n")
