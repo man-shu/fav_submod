@@ -5,7 +5,8 @@ import json
 def search_repositories(query, token, max_pages=100):
     repos = []
     for page in range(1, max_pages + 1):
-        url = f"https://api.github.com/search/repositories?q={query}&page={page}&per_page=100"
+        url = f"https://api.github.com/search/repositories?q={query}"
+        f"&page={page}&per_page=100"
         headers = {"Authorization": f"token {token}"}
         response = requests.get(url, headers=headers).json()
         total_count = response["total_count"]
