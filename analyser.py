@@ -8,19 +8,37 @@ def count_imports(repo_dir):
         for file in files:
             if file.endswith(".py"):
                 with open(os.path.join(root, file), "r") as f:
-                    tree = ast.parse(f.read(), filename=file)
+                    try:
+                        tree = ast.parse(f.read(), filename=file)
+                    except Exception as e:
+                        print(f"\nError parsing {os.path.join(root, file)}")
+                        print(f"\t{e}")
+                        continue
                     for node in ast.walk(tree):
                         if isinstance(node, ast.Import):
                             for alias in node.names:
                                 if alias.name.startswith("nilearn"):
-                                    import_counts[alias.name] = (
-                                        import_counts.get(alias.name, 0) + 1
-                                    )
+                                    submodules = alias.name.split(".")[1:]
+                                    if len(submodules) > 0:
+                                        import_counts[submodules[0]] = (
+                                            import_counts.get(submodules[0], 0)
+                                            + 1
+                                        )
                         elif isinstance(node, ast.ImportFrom):
                             if node.module and node.module.startswith(
                                 "nilearn"
                             ):
-                                import_counts[node.module] = (
-                                    import_counts.get(node.module, 0) + 1
-                                )
+                                submodules = node.module.split(".")[1:]
+                                if len(submodules) > 0:
+                                    import_counts[submodules[0]] = (
+                                        import_counts.get(submodules[0], 0) + 1
+                                    )
+                                else:
+                                    submodules = [
+                                        submod.name for submod in node.names
+                                    ]
+                                    for submodule in submodules:
+                                        import_counts[submodule] = (
+                                            import_counts.get(submodule, 0) + 1
+                                        )
     return import_counts
